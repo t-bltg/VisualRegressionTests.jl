@@ -23,7 +23,10 @@ function blurdiff(A::AbstractArray, B::AbstractArray, sigma)
     diffpct
 end
 
-sad(A::AbstractArray, B::AbstractArray) = sumdiff(abs, A, B)
+# github.com/JuliaGraphics/ColorVectorSpace.jl#abs-and-abs2
+_abs(c)  = mapreducec(v->abs(float(v)), +, 0, c)
+
+sad(A::AbstractArray, B::AbstractArray) = sumdiff(_abs, A, B)
 
 function sumdiff(f, A::AbstractArray, B::AbstractArray)
     axes(A) == axes(B) || throw(DimensionMismatch("A and B must have the same indices"))
